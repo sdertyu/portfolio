@@ -1,28 +1,29 @@
-import { globalIgnores } from 'eslint/config'
-import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
-import pluginVue from 'eslint-plugin-vue'
-import pluginPlaywright from 'eslint-plugin-playwright'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+// eslint.config.ts
+import js from '@eslint/js'
+import vue from 'eslint-plugin-vue'
+import typescript from '@typescript-eslint/eslint-plugin'
+import parser from '@typescript-eslint/parser'
 
-// To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
-// import { configureVueProject } from '@vue/eslint-config-typescript'
-// configureVueProject({ scriptLangs: ['ts', 'tsx'] })
-// More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
-
-export default defineConfigWithVueTs(
+export default [
+  js.configs.recommended,
   {
-    name: 'app/files-to-lint',
-    files: ['**/*.{ts,mts,tsx,vue}'],
+    files: ['*.ts', '*.tsx', '*.vue'],
+    languageOptions: {
+      parser,
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      vue,
+      '@typescript-eslint': typescript,
+    },
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
   },
-
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
-
-  pluginVue.configs['flat/essential'],
-  vueTsConfigs.recommended,
-  
   {
-    ...pluginPlaywright.configs['flat/recommended'],
-    files: ['e2e/**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    ignores: ['dist/**', 'dist-ssr/**', 'coverage/**'],
   },
-  skipFormatting,
-)
+]
