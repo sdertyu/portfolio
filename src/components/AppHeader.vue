@@ -19,27 +19,18 @@
 </template>
 
 <script setup lang="ts">
+import useStore from '@/stores/stores'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 
-interface NavItem {
-  href: string
-  label: string
-}
+const store = useStore();
 
 const headerRef = ref<HTMLElement>()
 const scrollY = ref(0)
 
-const navItems: NavItem[] = [
-  { href: '#home', label: 'Trang chủ' },
-  { href: '#about', label: 'Giới thiệu' },
-  { href: '#experience', label: 'Kinh nghiệm' },
-  { href: '#skills', label: 'Kỹ năng' },
-  { href: '#projects', label: 'Dự án' },
-  { href: '#contact', label: 'Liên hệ' },
-]
+const navItems = store.navItems;
 
 const headerClass = computed(() => ({
-  'bg-black/90 backdrop-blur-sm': scrollY.value <= 100,
+  'bg-black/45 backdrop-blur-sm': scrollY.value <= 100,
   'bg-black/95 backdrop-blur-md': scrollY.value > 100,
 }))
 
